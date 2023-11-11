@@ -34,7 +34,7 @@ export const SearchForm = ({ onSubmit, toast }) => {
         autoComplete="off"
         name="search"
         onChange={onChange}
-        placeholder="pop in the title of the movie..."
+        placeholder="find your movie..."
         value={query}
       />
     </Form>
