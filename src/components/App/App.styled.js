@@ -6,15 +6,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 40px;
-  color: #010101;
-
-  /* style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }} */
+  color: #d5c7de;
 `;
 export default Container;

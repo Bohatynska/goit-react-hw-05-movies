@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+const { default: styled } = require('styled-components');
 
-export const SearchWrap = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `;

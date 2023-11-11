@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const Wrapper = styled.div`
+  margin-top: 30px;
+`;
+
 export const List = styled.ul`
   display: grid;
   max-width: calc(100vw - 48px);
@@ -13,17 +17,27 @@ export const List = styled.ul`
   margin-right: auto;
 `;
 
-export const MovieItem = styled.li`
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-
+export const ListItem = styled.li`
   &:not(:last-child) {
     margin-bottom: 10px;
   }
 `;
 
-export const Poster = styled.img`
+export const Photo = styled.img`
   width: 100%;
   height: 360px;
+  margin-bottom: 8px;
+`;
+
+export const Category = styled.p`
+  color: #2e0747;
+  font-weight: 400;
+  font-size: 15px;
+  :not(:last-child) {
+    margin-bottom: 10px;
+  }
+`;
+
+export const Description = styled.span`
+  color: #551f78;
 `;

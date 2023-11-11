@@ -1,41 +1,42 @@
 import { useState } from 'react';
-import { Form, Input, SubmitButton } from './SearchForm.styled';
+import { Form, Input, SearchButton } from './SearchForm.styled';
 
-const SearchForm = ({ onSubmit }) => {
+export const SearchForm = ({ onSubmit, toast }) => {
   const [query, setQuery] = useState('');
-  const changeInput = e => {
-    const inputData = e.target.value.trim().toLowerCase();
-    setQuery(inputData);
-  };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    if (!query) {
-      alert('You forgot to enter a request');
-      return;
-    }
-    onSubmit(query);
-    reset();
+  const onChange = e => {
+    const value = e.target.value.trim().toLowerCase();
+    setQuery(value);
   };
 
   const reset = () => {
     setQuery('');
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    if (!query) {
+      toast('Please write something...');
+      return;
+    }
+
+    onSubmit(query);
+    reset();
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
-      <label>
-        <Input
-          autoFocus
-          type="text"
-          autoComplete="off"
-          placeholder="Search movies???"
-          onChange={changeInput}
-        />
-      </label>
-      <SubmitButton type="submit">Search</SubmitButton>
+      <SearchButton type="submit">Search</SearchButton>
+      <Input
+        type="text"
+        autoFocus
+        autoComplete="off"
+        name="search"
+        onChange={onChange}
+        placeholder="pop in the title of the movie..."
+        value={query}
+      />
     </Form>
   );
 };
-export default SearchForm;

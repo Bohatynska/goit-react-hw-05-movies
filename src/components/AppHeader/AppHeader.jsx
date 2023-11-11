@@ -1,16 +1,12 @@
-import {
-  Header,
-  NavPanel,
-  StyledNavLink,
-} from 'components/AppHeader/AppHeader.styled';
-const AppHeader = () => {
+import { Header, Nav, StyledLink } from './AppHeader.styled';
+
+export const AppBar = () => {
   return (
     <Header>
-      <NavPanel>
-        <StyledNavLink to="/"> Home</StyledNavLink>
-        <StyledNavLink to="/movies"> Movies</StyledNavLink>
-      </NavPanel>
+      <Nav>
+        <StyledLink to="/">Home</StyledLink>
+        <StyledLink to="/movies">Movies</StyledLink>
+      </Nav>
     </Header>
   );
 };
-export default AppHeader;

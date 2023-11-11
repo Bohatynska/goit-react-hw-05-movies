@@ -1,42 +1,48 @@
 import { useState, useEffect } from 'react';
-import SearchForm from 'components/SearchForm/SearchForm';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { getSearchMovie } from 'components/Api/Api';
-import { Link } from 'react-router-dom';
-import { SearchWrap } from './Movies.styled';
+import { useSearchParams } from 'react-router-dom';
+import { fetchFilmsByName } from 'Api/Api.jsx';
+import { SearchForm } from 'components/SearchForm/SearchForm';
+import { MovieList } from 'components/MovieList/MovieList';
+import { ErrorMessage } from 'components/ErrorMessage/ErorrMessage';
+import { Loader } from 'components/Loader.jsx';
+import { Wrapper } from './Movies.styled.js';
 
 const Movies = () => {
   const [query, setQuery] = useState('');
+  const [filmList, setFilmList] = useState([]);
+  const [error, setError] = useState(null);
   const [searchParam, setSearchParam] = useSearchParams();
   const search = searchParam.get('query') ?? '';
   const [isLoading, setIsLoading] = useState(false);
-  const [films, setFilms] = useState([]);
-  const location = useLocation();
 
-  const newQuery = value => {
-    if (value === query) {
+  const getQuery = newQuery => {
+    if (newQuery === query) {
+      alert('You already see results for this query 🥳');
       return;
     }
-    setQuery(value);
-    setSearchParam(value !== '' ? { query: value } : {});
+
+    setQuery(newQuery);
+    setSearchParam(newQuery !== '' ? { query: newQuery } : {});
   };
 
-  async function getFilms(value) {
+  async function createFilmList(newQuery) {
     try {
-      setFilms([]);
+      setFilmList([]);
       setIsLoading(true);
 
-      const filmList = await getSearchMovie(value);
-      console.log(filmList);
-      if (!filmList.length) {
+      const films = await fetchFilmsByName(newQuery);
+      if (!films.length) {
+        setError(false);
         return;
       }
 
-      setFilms(filmList);
-    } catch (error) {
-      console.log(error);
+      setFilmList(films);
+      setError(true);
+    } catch {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -46,32 +52,21 @@ const Movies = () => {
     if (!query) {
       return;
     }
-    getFilms(query);
-  }, [query, search]);
+    createFilmList(query);
+    // eslint-disable-next-line
+  }, [query]);
 
   return (
-    <>
-      <SearchWrap>
-        <SearchForm onSubmit={newQuery} />
-      </SearchWrap>
-      <div>
-        {films.map(film => (
-          <li key={film.id}>
-            <Link
-              id={film.id}
-              to={`/movies/${film.id}`}
-              state={{ from: location }}
-            >
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${film.poster_path}`}
-                alt={film.title}
-              />
-              {film.title}
-            </Link>
-          </li>
-        ))}
-      </div>
-    </>
+    <Wrapper>
+      <SearchForm onSubmit={getQuery} />
+      {isLoading && <Loader />}
+      {error === false ? (
+        <ErrorMessage text={'Sorry, no results for your search'} />
+      ) : (
+        <MovieList list={filmList} />
+      )}
+    </Wrapper>
   );
 };
+
 export default Movies;
